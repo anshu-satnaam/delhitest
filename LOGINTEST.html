@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMaster | Student Study Portal</title>
+    <style>
+        /* Color Palette */
+        :root {
+            --dark-blue: #071739;
+            --medium-blue: #4B6382;
+            --light-blue: #A4B5C4;
+            --pale-blue: #CDD5DB;
+            --brown: #A68868;
+            --cream: #E3C39D;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--pale-blue);
+            color: var(--dark-blue);
+            transition: margin-left 0.3s;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--dark-blue);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            color: var(--cream);
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 40px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--cream);
+        }
+
+        .menu-toggle {
+            display: none;
+            color: var(--cream);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            left: 0;
+            background-color: var(--medium-blue);
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 80px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar a {
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            color: var(--pale-blue);
+            display: block;
+            transition: 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--dark-blue);
+            color: var(--cream);
+            border-left: 4px solid var(--cream);
+        }
+
+        .sidebar a.active {
+            background-color: var(--dark-blue);
+            color: var(--cream);
+            border-left: 4px solid var(--cream);
+        }
+
+        .sidebar .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 2rem;
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+
+        .main.shifted {
+            margin-left: 250px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(7, 23, 57, 0.8), rgba(7, 23, 57, 0.8)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            padding-left: 3rem;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-blue);
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--brown);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+
+        /* Study Materials */
+        .study-materials {
+            margin-bottom: 2rem;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .material-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .material-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .material-img {
+            height: 150px;
+            background-color: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-blue);
+            font-size: 3rem;
+        }
+
+        .material-content {
+            padding: 1.5rem;
+        }
+
+        .material-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+
+        .material-content p {
+            color: var(--medium-blue);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .material-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--brown);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Flashcard System */
+        .flashcard-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .flashcard {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin: 0 auto 1.5rem;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .flashcard-front {
+            background-color: var(--cream);
+            color: var(--dark-blue);
+        }
+
+        .flashcard-back {
+            background-color: var(--medium-blue);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Pomodoro Timer */
+        .timer-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--dark-blue);
+            font-family: monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .timer-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .start-btn {
+            background-color: var(--brown);
+            color: white;
+        }
+
+        .reset-btn {
+            background-color: var(--light-blue);
+            color: var(--dark-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timer-display {
+                font-size: 3rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="still-27cbc4e6a2d64291c7b54e04dbb079d4.webp" alt="Logo">
+            <span>EduMaster</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#">Courses</a>
+            <a href="#">Study Materials</a>
+            <a href="#">Tools</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="javascript:void(0)" class="close-btn" id="closeBtn">&times;</a>
+        <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="#"><i class="fas fa-book"></i> My Courses</a>
+        <a href="#"><i class="fas fa-file-alt"></i> Notes</a>
+        <a href="#"><i class="fas fa-tasks"></i> Assignments</a>
+        <a href="#"><i class="fas fa-chart-line"></i> Progress</a>
+        <a href="#"><i class="fas fa-flask"></i> Labs</a>
+        <a href="#"><i class="fas fa-question-circle"></i> Q&A Forum</a>
+        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main" id="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Welcome to Your Study Portal</h1>
+            <p>Access all your learning materials, tools, and resources in one place to maximize your academic success.</p>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for courses, materials, or tools...">
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-book-open"></i>
+                <h3>Comprehensive Materials</h3>
+                <p>Access textbooks, lecture notes, and study guides for all your courses.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>Interactive Lessons</h3>
+                <p>Engage with video lectures and interactive learning modules.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clipboard-check"></i>
+                <h3>Practice Tests</h3>
+                <p>Test your knowledge with quizzes and mock exams.</p>
+            </div>
+        </section>
+
+        <!-- Study Materials -->
+        <section class="study-materials">
+            <h2 style="margin-bottom: 1rem; color: var(--dark-blue);">Recent Study Materials</h2>
+            <div class="materials-grid">
+                <div class="material-card">
+                    <div class="material-img">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <div class="material-content">
+                        <h3>Physics 101</h3>
+                        <p>Chapter 5: Thermodynamics - Complete notes and practice problems</p>
+                        <div class="material-footer">
+                            <span>Updated: 2 days ago</span>
+                            <a href="#" class="btn">View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-img">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <div class="material-content">
+                        <h3>Biology 201</h3>
+                        <p>Genetics module with interactive diagrams and case studies</p>
+                        <div class="material-footer">
+                            <span>Updated: 1 week ago</span>
+                            <a href="#" class="btn">View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-img">
+                        <i class="fas fa-square-root-alt"></i>
+                    </div>
+                    <div class="material-content">
+                        <h3>Calculus II</h3>
+                        <p>Integration techniques with step-by-step solutions</p>
+                        <div class="material-footer">
+                            <span>Updated: 3 days ago</span>
+                            <a href="#" class="btn">View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-img">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="material-content">
+                        <h3>Computer Science</h3>
+                        <p>Data structures and algorithms cheat sheet</p>
+                        <div class="material-footer">
+                            <span>Updated: 5 days ago</span>
+                            <a href="#" class="btn">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flashcard System -->
+        <section class="flashcard-container">
+            <h2 style="margin-bottom: 1rem; color: var(--dark-blue);">Study Flashcards</h2>
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>What is the capital of France?</h3>
+                    </div>
+                    <div class="flashcard-back">
+                        <h3>Paris</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="flashcard-nav">
+                <button class="btn" onclick="prevCard()"><i class="fas fa-arrow-left"></i> Previous</button>
+                <span style="margin: 0 1rem; align-self: center;">Card 1 of 5</span>
+                <button class="btn" onclick="nextCard()">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Pomodoro Timer -->
+        <section class="timer-container">
+            <h2 style="margin-bottom: 1rem; color: var(--dark-blue);">Study Timer</h2>
+            <div class="timer-display" id="timer">25:00</div>
+            <div class="timer-controls">
+                <button class="timer-btn start-btn" id="startBtn" onclick="startTimer()">Start</button>
+                <button class="timer-btn reset-btn" id="resetBtn" onclick="resetTimer()">Reset</button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <button class="btn" onclick="setTimer(25)">Pomodoro (25m)</button>
+                <button class="btn" onclick="setTimer(5)">Short Break (5m)</button>
+                <button class="timer-btn reset-btn" onclick="setTimer(15)">Long Break (15m)</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        const closeBtn = document.getElementById('closeBtn');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            main.classList.add('shifted');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            main.classList.remove('shifted');
+        });
+
+        // Flashcard System
+        let currentCard = 1;
+        const totalCards = 5;
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentCard < totalCards) {
+                currentCard++;
+                updateCardCounter();
+                resetCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                currentCard--;
+                updateCardCounter();
+                resetCard();
+            }
+        }
+
+        function resetCard() {
+            const card = document.getElementById('flashcard');
+            if (card.classList.contains('flipped')) {
+                card.classList.remove('flipped');
+            }
+            // In a real app, you would load new card content here
+        }
+
+        function updateCardCounter() {
+            document.querySelector('.flashcard-nav span').textContent = `Card ${currentCard} of ${totalCards}`;
+        }
+
+        // Pomodoro Timer
+        let timer;
+        let timeLeft = 1500; // 25 minutes in seconds
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                document.getElementById('startBtn').textContent = 'Pause';
+                timer = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        isRunning = false;
+                        document.getElementById('startBtn').textContent = 'Start';
+                        alert('Timer completed!');
+                    }
+                }, 1000);
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('startBtn').textContent = 'Start';
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById('startBtn').textContent = 'Start';
+            timeLeft = 1500;
+            updateTimerDisplay();
+        }
+
+        function setTimer(minutes) {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById('startBtn').textContent = 'Start';
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+        }
+
+        // Initialize
+        updateTimerDisplay();
+    </script>
+</body>
+</html>
